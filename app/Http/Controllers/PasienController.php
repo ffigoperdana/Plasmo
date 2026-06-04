@@ -2,102 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pasien;
 use Illuminate\Http\Request;
+use App\Models\Pasien;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PasienController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function show()
     {
-
-        return view('pasien.dashboard');
+        $pasiens = Pasien::all();
+        return view('pages.admin.list-pasien', compact('pasiens'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $pasien = new Pasien;
-        $pasien->nama_pemohon=$request->nama_pemohon;
-        $pasien->hotline=$request->hotline;
-        $pasien->nama_pasien=$request->nama_pasien;
-        $pasien->gender=$request->gender;        
-        $pasien->age=$request->age;
-        $pasien->blood_type=$request->blood_type;
-        $pasien->rhesus=$request->rhesus;
-        $pasien->hospital=$request->hospital;
-        $pasien->hospital_room=$request->hospital_room;
-        $pasien->province=$request->province;
-        $pasien->city=$request->city;
-        $pasien->File_TPK=$request->File_TPK;
-        $pasien->Link_TPK=$request->Link_TPK;
-        $pasien->jumlah_plasma=$request->jumlah_plasma;
-        $pasien->vaccinated=$request->vaccinated;
-        $pasien->save();
-        return redirect('stok-plasma-donor');
+        $data = $request->validate([
+            'full_name' => 'required',
+            'blood_type' => 'required',
+            'phone_number' => 'required',
+            'address' => 'required',
+            'age' => 'required',
+            'weight' => 'required',
+            'plasma_status' => 'required',
+        ]);
+
+        $pasien = Pasien::updateOrCreate(
+            ['user_id' => Auth::id()],
+            $data + ['user_id' => Auth::id()]
+        );
+
+        return redirect()->route('dashboard-pasien');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pasien  $pasien
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pasien $pasien)
+    public function changePassword()
     {
-        //
+        return view('pages.pasien.change-password');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pasien  $pasien
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pasien $pasien)
+    public function updatePassword(Request $request)
     {
-        //
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect']);
+        }
+
+        Auth::user()->update(['password' => Hash::make($request->password)]);
+        return back()->with('success', 'Password updated successfully');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pasien  $pasien
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pasien $pasien)
+    public function changeEmail()
     {
-        //
+        return view('pages.pasien.change-email');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pasien  $pasien
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pasien $pasien)
+    public function updateEmail(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+        ]);
+
+        Auth::user()->update(['email' => $request->email]);
+        return back()->with('success', 'Email updated successfully');
+    }
+
+    public function edit($userId)
+    {
+        $pasien = Pasien::where('user_id', $userId)->firstOrFail();
+        return view('pages.admin.edit-pasien', compact('pasien'));
+    }
+
+    public function update(Request $request, $userId)
+    {
+        $pasien = Pasien::where('user_id', $userId)->firstOrFail();
+        $data = $request->validate([
+            'full_name' => 'required',
+            'blood_type' => 'required',
+            'phone_number' => 'required',
+            'address' => 'required',
+            'age' => 'required',
+            'weight' => 'required',
+            'plasma_status' => 'required',
+        ]);
+
+        $pasien->update($data);
+        return redirect()->route('list-pasien')->with('success', 'Pasien updated successfully');
+    }
+
+    public function destroy($userId)
+    {
+        $pasien = Pasien::where('user_id', $userId)->firstOrFail();
+        $pasien->delete();
+        return redirect()->route('list-pasien')->with('success', 'Pasien deleted successfully');
+    }
+
+    public function showProfile()
+    {
+        $pasien = Pasien::where('user_id', Auth::id())->first();
+        return view('pages.pasien.profile-pasien', compact('pasien'));
+    }
+
+    public function showDashboard()
+    {
+        $pasien = Pasien::where('user_id', Auth::id())->first();
+        return view('pages.pasien.dashboard-pasien', compact('pasien'));
     }
 }

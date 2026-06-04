@@ -7,98 +7,54 @@ use App\Models\Berita;
 
 class BeritaController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $berita = Berita::all();
-        return view('pages.berita.berita-data', ['beritas'=> $berita]);
+        $beritas = Berita::all();
+        return view('pages.admin.berita', compact('beritas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $berita = new Berita;
-        $berita->judul_berita=$request->judul_berita;
-        $berita->isi_berita=$request->isi_berita;
-        $berita->berita_photo_path = $request->berita_photo_path;
-        $berita->save();
-        return redirect('berita');
+        $data = $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('images/berita', 'public');
+        }
+
+        Berita::create($data);
+        return redirect()->route('berita')->with('success', 'Berita created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Berita $berita)
-    {
-        $data= Berita::All();
-        return view('pages.berita.berita-data', ['beritas'=>$data]);
-    }
-
-    public function showBerita(Berita $berita)
-    {
-        $data= Berita::All();
-        return view('pages.pasien.berita', ['beritas'=>$data]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $data = Berita::findOrFail($id);
-        return view('pages.berita.berita-edit', [
-            'berita' => $data
-        ]);
+        $berita = Berita::findOrFail($id);
+        return view('pages.admin.berita-edit', compact('berita'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $berita = Berita::find($id)->update($request->all());
-        return redirect('berita');
+        $berita = Berita::findOrFail($id);
+        $data = $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('images/berita', 'public');
+        }
+
+        $berita->update($data);
+        return redirect()->route('berita')->with('success', 'Berita updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Berita $berita, $id)
+    public function destroy($id)
     {
-        $berita = Berita::find($id);
-        $berita->delete();
-        return redirect('berita');
+        Berita::findOrFail($id)->delete();
+        return redirect()->route('berita')->with('success', 'Berita deleted successfully');
     }
 }

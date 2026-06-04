@@ -2,72 +2,91 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return view('pages.user.user-data', [
-            'user' => User::class
+        $users = User::with('role')->get();
+        return view('pages.admin.user', compact('users'));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'role_id' => 'required|exists:roles,id',
         ]);
+
+        $data['password'] = Hash::make($data['password']);
+        User::create($data);
+
+        return redirect()->route('user')->with('success', 'User created successfully');
     }
 
-    public function create()
+    public function edit($userId)
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $roles = Role::pluck('title', 'id');
-
-        return view('users.create', compact('roles'));
+        $user = User::findOrFail($userId);
+        return view('pages.admin.user-edit', compact('user'));
     }
 
-    public function store(StoreUserRequest $request)
+    public function update(Request $request, $userId)
     {
-        $user = User::create($request->validated());
-        $user->roles()->sync($request->input('roles', []));
+        $user = User::findOrFail($userId);
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $userId,
+            'role_id' => 'required|exists:roles,id',
+        ]);
 
-        return redirect()->route('users.index');
+        $user->update($data);
+        return redirect()->route('user')->with('success', 'User updated successfully');
     }
 
-    public function show(User $user)
+    public function destroy($userId)
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('users.show', compact('user'));
+        User::findOrFail($userId)->delete();
+        return redirect()->route('user')->with('success', 'User deleted successfully');
     }
 
-    public function edit(User $user)
+    public function changePassword()
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $roles = Role::pluck('title', 'id');
-
-        $user->load('roles');
-
-        return view('users.edit', compact('user', 'roles'));
+        return view('pages.admin.change-password');
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function updatePassword(Request $request)
     {
-        $user->update($request->validated());
-        $user->roles()->sync($request->input('roles', []));
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
-        return redirect()->route('users.index');
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect']);
+        }
+
+        Auth::user()->update(['password' => Hash::make($request->password)]);
+        return back()->with('success', 'Password updated successfully');
     }
 
-    public function destroy(User $user)
+    public function changeEmail()
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        return view('pages.admin.change-email');
+    }
 
-        $user->delete();
+    public function updateEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+        ]);
 
-        return redirect()->route('users.index');
+        Auth::user()->update(['email' => $request->email]);
+        return back()->with('success', 'Email updated successfully');
     }
 }

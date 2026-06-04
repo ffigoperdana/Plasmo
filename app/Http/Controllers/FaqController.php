@@ -4,110 +4,114 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Faq;
-use DB;
 
+/**
+ * FaqController
+ *
+ * Controller untuk mengelola data FAQ (Frequently Asked Questions)
+ * pada aplikasi donor plasma darah Plasmo.
+ *
+ * @package App\Http\Controllers
+ */
 class FaqController extends Controller
 {
-     /**
-     * Display a listing of the resource.
+    /**
+     * Menampilkan daftar semua FAQ.
      *
-     * @return \Illuminate\Http\Response
+     * Metode ini mengambil semua data FAQ dari database dan
+     * menampilkannya pada halaman admin.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $faq = Faq::all();
-        return view('pages.faq.faq-data', ['faqs'=> $faq]);
+        $faqs = Faq::latest()->get();
+        return view('pages.admin.faq', compact('faqs'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form untuk membuat FAQ baru.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        //
+        return view('pages.admin.faq-create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan FAQ baru ke database.
+     *
+     * Validasi input: pertanyaan (question) dan jawaban (answer) wajib diisi.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        $faq = new Faq;
-        $faq->pertanyaan=$request->pertanyaan;
-        $faq->jawaban=$request->jawaban;
-        $faq->save();
-        return redirect('faq');
+        $data = $request->validate([
+            'question' => 'required|string|max:255',
+            'answer'   => 'required|string',
+        ]);
+
+        Faq::create($data);
+
+        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan detail FAQ tertentu.
      *
      * @param  \App\Models\Faq  $faq
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show(Faq $faq)
     {
-        $data= Faq::All();
-        return view('pages.faq.faq-data', ['faqs'=>$data]);
+        return view('pages.admin.faq-show', compact('faq'));
     }
-
-    public function showFaq(Faq $faq)
-    {
-        $data= Faq::All();        
-        return view('pages.pasien.faq', ['faqs'=>$data]);
-    }
-
-    public function countFaq(Faq $faq)
-    {
-        $data= DB::table('faq')->count();
-        return view('pages.pasien.faq', ['faqs'=>$data]);
-    }
-
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan form untuk mengedit FAQ.
      *
      * @param  \App\Models\Faq  $faq
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Faq $faq)
     {
-        $faq = Faq::find($id);
-        return view('pages.faq.faq-edit', compact('faq'));
+        return view('pages.admin.faq-edit', compact('faq'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Memperbarui data FAQ yang sudah ada di database.
+     *
+     * Validasi input: pertanyaan (question) dan jawaban (answer) wajib diisi.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Faq  $faq
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Faq $faq)
     {
-        $faq = Faq::find($id);
-        $faq->pertanyaan = $request->pertanyaan;
-        $faq->jawaban = $request->jawaban;
-        $faq->update();
-      
-        return $faq;
+        $data = $request->validate([
+            'question' => 'required|string|max:255',
+            'answer'   => 'required|string',
+        ]);
+
+        $faq->update($data);
+
+        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus FAQ dari database.
      *
      * @param  \App\Models\Faq  $faq
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Faq $faq, $id)
+    public function destroy(Faq $faq)
     {
-        $faq = Faq::find($id);
         $faq->delete();
-        return view('pages.faq.faq-data');
+
+        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil dihapus.');
     }
 }

@@ -6,22 +6,35 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Model User
+ *
+ * Merepresentasikan pengguna yang terdaftar dalam aplikasi
+ * donor plasma darah Plasmo. Pengguna dapat berperan sebagai
+ * admin, pendonor, atau pasien.
+ *
+ * @property int    $id
+ * @property string $name              Nama pengguna
+ * @property string $email             Alamat email
+ * @property string $password          Password (terenkripsi)
+ * @property int    $role_id           ID peran pengguna
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ *
+ * @package App\Models
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Atribut yang dapat diisi secara massal (mass assignable).
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -31,44 +44,57 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * Atribut yang disembunyikan dari serialisasi (JSON, array).
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Casting tipe data atribut.
      *
-     * @var array
+     * @var array<array-key, mixed>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
     /**
-     * The accessors to append to the model's array form.
+     * Relasi ke model Role.
      *
-     * @var array
+     * Setiap pengguna memiliki satu peran (role).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    protected $appends = [
-        'profile_photo_url',
-    ];
-    
-    public static function search($query)
+    public function role()
     {
-        return empty($query) ? static::query()
-            : static::where('name', 'like', '%'.$query.'%')
-                ->orWhere('email', 'like', '%'.$query.'%');
+        return $this->belongsTo(Role::class);
     }
-    //RolesManagement
-    public function roles()
+
+    /**
+     * Relasi ke model Pendonor.
+     *
+     * Seorang pengguna dengan peran pendonor memiliki satu profil pendonor.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function pendonor()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->hasOne(Pendonor::class);
+    }
+
+    /**
+     * Relasi ke model Pasien.
+     *
+     * Seorang pengguna dengan peran pasien memiliki satu profil pasien.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function pasien()
+    {
+        return $this->hasOne(Pasien::class);
     }
 }

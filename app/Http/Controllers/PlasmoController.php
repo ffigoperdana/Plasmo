@@ -2,84 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plasmo;
 use Illuminate\Http\Request;
+use App\Models\Pendonor;
+use App\Models\Pasien;
+use Illuminate\Support\Facades\Auth;
 
 class PlasmoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function dashboard()
     {
-        //
+        $totalPendonors = Pendonor::count();
+        $totalPasiens = Pasien::count();
+        $readyPendonors = Pendonor::where('ready', 1)->count();
+
+        return view('pages.admin.dashboard', compact('totalPendonors', 'totalPasiens', 'readyPendonors'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function dashboardPendonor()
     {
-        //
+        return redirect()->route('dashboard-pendonor');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function dashboardPasien()
     {
-        //
+        return redirect()->route('dashboard-pasien');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Plasmo  $plasmo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Plasmo $plasmo)
+    public function welcome()
     {
-        //
+        return view('welcome');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Plasmo  $plasmo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Plasmo $plasmo)
+    public function redirectAfterLogin()
     {
-        //
-    }
+        $role = Auth::user()->role->name;
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Plasmo  $plasmo
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Plasmo $plasmo)
-    {
-        //
-    }
+        if ($role === 'admin') {
+            return redirect()->route('dashboard');
+        } elseif ($role === 'pendonor') {
+            return redirect()->route('dashboard-pendonor');
+        } elseif ($role === 'pasien') {
+            return redirect()->route('dashboard-pasien');
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Plasmo  $plasmo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Plasmo $plasmo)
-    {
-        //
+        return redirect()->route('welcome');
     }
 }

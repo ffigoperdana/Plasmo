@@ -2,115 +2,130 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pendonor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\Pendonor;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PendonorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function index()
+    public function show()
     {
-        return view('pages.pendonor.stok-plasma-pendonor', [
-            'pendonor' => PendonorController::class
-        ]);
+        $pendonors = Pendonor::all();
+        return view('pages.admin.list-pendonor', compact('pendonors'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function showPendonor()
     {
-        //
+        $pendonors = Pendonor::where('ready', 1)->get();
+        return view('pages.pasien.stok-plasma-donor', compact('pendonors'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $pendonor = new Pendonor;
-        $pendonor->nama_pendonor=$request->nama_pendonor;
-        $pendonor->hotline=$request->hotline;
-        $pendonor->NIK=$request->NIK;
-        $pendonor->gender=$request->gender;
-        $pendonor->age=$request->age;
-        $pendonor->blood_type=$request->blood_type;
-        $pendonor->rhesus=$request->rhesus;
-        $pendonor->weight=$request->weight;
-        $pendonor->height=$request->height;
-        $pendonor->province=$request->province;
-        $pendonor->city=$request->city;
-        $pendonor->kecamatan=$request->kecamatan;
-        $pendonor->kelurahan=$request->nama_pendonor;
-        $pendonor->alamat=$request->alamat;
-        $pendonor->covid_infected=$request->covid_infected;
-        $pendonor->donors=$request->donors;
-        $pendonor->donors_apheresis=$request->donors_apheresis;
-        $pendonor->donors_hospital=$request->donors_hospital;
-        $pendonor->PCR_Positive=$request->PCR_Positive;
-        $pendonor->PCR_Negative=$request->PCR_Negative;
-        $pendonor->PCR_Positive_File=$request->PCR_Positive_File;
-        $pendonor->PCR_Negative_File=$request->PCR_Negative_File;
+        $data = $request->validate([
+            'full_name' => 'required',
+            'blood_list' => 'required',
+            'blood_type' => 'required',
+            'phone_number' => 'required',
+            'address' => 'required',
+            'age' => 'required',
+            'weight' => 'required',
+            'plasma_status' => 'required',
+        ]);
+
+        $pendonor = Pendonor::updateOrCreate(
+            ['user_id' => Auth::id()],
+            $data + ['user_id' => Auth::id()]
+        );
+
+        return redirect()->route('dashboard-pendonor');
+    }
+
+    public function changePassword()
+    {
+        return view('pages.pendonor.change-password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect']);
+        }
+
+        Auth::user()->update(['password' => Hash::make($request->password)]);
+        return back()->with('success', 'Password updated successfully');
+    }
+
+    public function changeEmail()
+    {
+        return view('pages.pendonor.change-email');
+    }
+
+    public function updateEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+        ]);
+
+        Auth::user()->update(['email' => $request->email]);
+        return back()->with('success', 'Email updated successfully');
+    }
+
+    public function edit($userId)
+    {
+        $pendonor = Pendonor::where('user_id', $userId)->firstOrFail();
+        return view('pages.admin.edit-pendonor', compact('pendonor'));
+    }
+
+    public function update(Request $request, $userId)
+    {
+        $pendonor = Pendonor::where('user_id', $userId)->firstOrFail();
+        $data = $request->validate([
+            'full_name' => 'required',
+            'blood_list' => 'required',
+            'blood_type' => 'required',
+            'phone_number' => 'required',
+            'address' => 'required',
+            'age' => 'required',
+            'weight' => 'required',
+            'plasma_status' => 'required',
+        ]);
+
+        $pendonor->update($data);
+        return redirect()->route('list-pendonor')->with('success', 'Pendonor updated successfully');
+    }
+
+    public function destroy($userId)
+    {
+        $pendonor = Pendonor::where('user_id', $userId)->firstOrFail();
+        $pendonor->delete();
+        return redirect()->route('list-pendonor')->with('success', 'Pendonor deleted successfully');
+    }
+
+    public function showProfile()
+    {
+        $pendonor = Pendonor::where('user_id', Auth::id())->first();
+        return view('pages.pendonor.profile-pendonor', compact('pendonor'));
+    }
+
+    public function showDashboard()
+    {
+        $pendonor = Pendonor::where('user_id', Auth::id())->first();
+        return view('pages.pendonor.dashboard-pendonor', compact('pendonor'));
+    }
+
+    public function toggleReady($userId)
+    {
+        $pendonor = Pendonor::where('user_id', $userId)->firstOrFail();
+        $pendonor->ready = !$pendonor->ready;
         $pendonor->save();
-        return redirect('stok-plasma-pendonor');
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pendonor  $pendonor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pendonor $pendonor)
-    {
-        $data= Pendonor::All();
-        return view('pages.pendonor.list-pendonor', ['pendonors'=>$data]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pendonor  $pendonor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pendonor $pendonor)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pendonor  $pendonor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pendonor $pendonor)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pendonor  $pendonor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pendonor $pendonor)
-    {
-        //
+        return redirect()->route('list-pendonor')->with('success', 'Pendonor ready status updated successfully');
     }
 }

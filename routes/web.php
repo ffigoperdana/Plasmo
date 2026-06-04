@@ -75,8 +75,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::view('/faq-donor', "pages.pasien.faq")->name('faq');
     Route::view('/berita-donor', "pages.pasien.berita")->name('berita');
     Route::view('/user-profile', "pages.pasien.user-profile")->name('user-profile');
-    Route::view('/change-password', "pages.pasien.change-password")->name('change-password');
-    Route::view('/change-email', "pages.pasien.change-email")->name('change-email');
+    Route::get('/change-password', [PasienController::class, 'changePassword'])->name('change-password');
+    Route::post('/change-password', [PasienController::class, 'updatePassword'])->name('change-password.update');
+    Route::get('/change-email', [PasienController::class, 'changeEmail'])->name('change-email');
+    Route::post('/change-email', [PasienController::class, 'updateEmail'])->name('change-email.update');
     Route::post('submit', [PasienController::class,'store']);
 
     //Route for pendonor
@@ -86,8 +88,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::view('/faq-donor', "pages.pendonor.faq")->name('faq');
     Route::view('/berita-pendonor', "pages.pendonor.berita")->name('berita');
     Route::view('/user-profile-pendonor', "pages.pendonor.user-profile")->name('user-profile');
-    Route::view('/change-password-pendonor', "pages.pendonor.change-password")->name('change-password');
-    Route::view('/change-email-pendonor', "pages.pendonor.change-email")->name('change-email');
+    Route::get('/change-password-pendonor', [PendonorController::class, 'changePassword'])->name('change-password-pendonor');
+    Route::post('/change-password-pendonor', [PendonorController::class, 'updatePassword'])->name('change-password-pendonor.update');
+    Route::get('/change-email-pendonor', [PendonorController::class, 'changeEmail'])->name('change-email-pendonor');
+    Route::post('/change-email-pendonor', [PendonorController::class, 'updateEmail'])->name('change-email-pendonor.update');
 
     Route::post('submit', [PendonorController::class,'store']);
     Route::post('/hospital/submit', [HospitalController::class,'store']);
@@ -98,7 +102,14 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/stok-plasma-donor', [PendonorController::class, 'showPendonor'])->name('pendonor');
     Route::get('/user', [ UserController::class, "index" ])->name('user');
     Route::view('/user/new', "pages.user.user-new")->name('user.new');
-    Route::view('/user/edit/{userId}', "pages.user.user-edit")->name('user.edit');
+    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/user/edit/{userId}', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('/user/update/{userId}', [UserController::class, 'update'])->name('user.update');
+    Route::get('/user/delete/{userId}', [UserController::class, 'destroy'])->name('user.delete');
+    Route::get('/change-password-admin', [UserController::class, 'changePassword'])->name('change-password-admin');
+    Route::post('/change-password-admin', [UserController::class, 'updatePassword'])->name('change-password-admin.update');
+    Route::get('/change-email-admin', [UserController::class, 'changeEmail'])->name('change-email-admin');
+    Route::post('/change-email-admin', [UserController::class, 'updateEmail'])->name('change-email-admin.update');
     Route::view('/dashboard-admin', "pages.user.dashboard-admin")->name('dashboard.admin');
 
     Route::get('/hospital', [ HospitalController::class, "show" ])->name('hospital');
