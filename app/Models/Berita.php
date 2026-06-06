@@ -24,14 +24,16 @@ class Berita extends Model
 {
     use HasFactory;
 
+    protected $table = 'berita';
+
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'title',
-        'content',
-        'image',
+        'judul_berita',
+        'isi_berita',
+        'berita_photo_path',
     ];
 }

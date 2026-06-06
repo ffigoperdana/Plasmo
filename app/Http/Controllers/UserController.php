@@ -11,8 +11,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('role')->get();
-        return view('pages.admin.user', compact('users'));
+        $user = User::class;
+        return view('pages.user.user-data', compact('user'));
     }
 
     public function store(Request $request)
@@ -33,7 +33,7 @@ class UserController extends Controller
     public function edit($userId)
     {
         $user = User::findOrFail($userId);
-        return view('pages.admin.user-edit', compact('user'));
+        return view('pages.user.user-edit', compact('user'));
     }
 
     public function update(Request $request, $userId)
@@ -57,7 +57,7 @@ class UserController extends Controller
 
     public function changePassword()
     {
-        return view('pages.admin.change-password');
+        return view('pages.pasien.change-password');
     }
 
     public function updatePassword(Request $request)
@@ -77,7 +77,7 @@ class UserController extends Controller
 
     public function changeEmail()
     {
-        return view('pages.admin.change-email');
+        return view('pages.pasien.change-email');
     }
 
     public function updateEmail(Request $request)

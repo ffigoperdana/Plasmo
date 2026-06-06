@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO |
                 \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
         );
+
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

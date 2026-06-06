@@ -24,6 +24,8 @@ class Plasmo extends Model
 {
     use HasFactory;
 
+    protected $table = 'plasmo';
+
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
      *

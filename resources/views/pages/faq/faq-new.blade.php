@@ -10,7 +10,7 @@
     </x-slot>
 
     <div class="content-settings d-flex flex-column" style="width: 100%;">
-            <form style="width: 100%;" action="submit" method="POST">
+            <form style="width: 100%;" action="{{ route('faq.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="text" style="font-weight: bold;font-family: 'Montserrat';">Pertanyaan FAQ</label>

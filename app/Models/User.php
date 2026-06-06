@@ -6,7 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
 
 /**
  * Model User
@@ -29,7 +31,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
@@ -51,6 +53,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
 
     /**
@@ -60,6 +64,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    protected $appends = [
+        'profile_photo_url',
     ];
 
     /**
@@ -72,6 +80,18 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function scopeSearch($query, $term)
+    {
+        if (!$term) {
+            return $query;
+        }
+
+        return $query->where(function ($query) use ($term) {
+            $query->where('name', 'like', "%{$term}%")
+                ->orWhere('email', 'like', "%{$term}%");
+        });
     }
 
     /**

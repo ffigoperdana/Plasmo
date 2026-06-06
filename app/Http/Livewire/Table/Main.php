@@ -36,18 +36,12 @@ class Main extends Component
         $data = $this->model::find($id);
 
         if (!$data) {
-            $this->emit("deleteResult", [
-                "status" => false,
-                "message" => "Gagal menghapus data " . $this->name
-            ]);
+            $this->dispatch("deleteResult", status: false, message: "Gagal menghapus data " . $this->name);
             return;
         }
 
         $data->delete();
-        $this->emit("deleteResult", [
-            "status" => true,
-            "message" => "Data " . $this->name . " berhasil dihapus!"
-        ]);
+        $this->dispatch("deleteResult", status: true, message: "Data " . $this->name . " berhasil dihapus!");
     }
 
     public function render()

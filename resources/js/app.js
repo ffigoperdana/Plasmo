@@ -14,7 +14,7 @@ function dataTableController (id) {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('deleteItem', this.id);
+                    Livewire.dispatch('deleteItem', { id: this.id });
                 }
             })
         }

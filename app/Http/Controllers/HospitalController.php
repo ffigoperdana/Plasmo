@@ -26,7 +26,7 @@ class HospitalController extends Controller
     public function index()
     {
         $hospitals = Hospital::all();
-        return view('pages.admin.list-hospital', compact('hospitals'));
+        return view('pages.hospital.hospital-data', compact('hospitals'));
     }
 
     /**
@@ -39,7 +39,7 @@ class HospitalController extends Controller
     public function showForPasien()
     {
         $hospitals = Hospital::all();
-        return view('pages.pasien.stok-plasma-rs', compact('hospitals'));
+        return view('pages.pasien.stok-plasma-donor', compact('hospitals'));
     }
 
     /**
@@ -49,7 +49,7 @@ class HospitalController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.hospital-create');
+        return view('pages.hospital.hospital-new');
     }
 
     /**
@@ -64,29 +64,22 @@ class HospitalController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'                    => 'required|string|max:255',
-            'address'                 => 'required|string',
-            'phone'                   => 'required|string|max:20',
-            'email'                   => 'required|email|max:255',
-            'website'                 => 'nullable|url|max:255',
-            'image'                   => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'stok_plasma_a_positif'   => 'nullable|integer|min:0',
-            'stok_plasma_a_negatif'   => 'nullable|integer|min:0',
-            'stok_plasma_b_positif'   => 'nullable|integer|min:0',
-            'stok_plasma_b_negatif'   => 'nullable|integer|min:0',
-            'stok_plasma_ab_positif'  => 'nullable|integer|min:0',
-            'stok_plasma_ab_negatif'  => 'nullable|integer|min:0',
-            'stok_plasma_o_positif'   => 'nullable|integer|min:0',
-            'stok_plasma_o_negatif'   => 'nullable|integer|min:0',
+            'name' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'hotline' => 'required|string|max:255',
+            'stok_plasma_a_positif' => 'nullable|integer|min:0',
+            'stok_plasma_a_negatif' => 'nullable|integer|min:0',
+            'stok_plasma_b_positif' => 'nullable|integer|min:0',
+            'stok_plasma_b_negatif' => 'nullable|integer|min:0',
+            'stok_plasma_ab_positif' => 'nullable|integer|min:0',
+            'stok_plasma_ab_negatif' => 'nullable|integer|min:0',
+            'stok_plasma_o_positif' => 'nullable|integer|min:0',
+            'stok_plasma_o_negatif' => 'nullable|integer|min:0',
         ]);
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('hospitals', 'public');
-        }
 
         Hospital::create($data);
 
-        return redirect()->route('admin.hospital.index')->with('success', 'Rumah sakit berhasil ditambahkan.');
+        return redirect()->route('hospital')->with('success', 'Rumah sakit berhasil ditambahkan.');
     }
 
     /**
@@ -97,7 +90,8 @@ class HospitalController extends Controller
      */
     public function show(Hospital $hospital)
     {
-        return view('pages.admin.hospital-show', compact('hospital'));
+        $hospitals = Hospital::all();
+        return view('pages.hospital.hospital-data', compact('hospitals'));
     }
 
     /**
@@ -108,7 +102,7 @@ class HospitalController extends Controller
      */
     public function edit(Hospital $hospital)
     {
-        return view('pages.admin.hospital-edit', compact('hospital'));
+        return view('pages.hospital.hospital-edit', compact('hospital'));
     }
 
     /**
@@ -124,29 +118,22 @@ class HospitalController extends Controller
     public function update(Request $request, Hospital $hospital)
     {
         $data = $request->validate([
-            'name'                    => 'required|string|max:255',
-            'address'                 => 'required|string',
-            'phone'                   => 'required|string|max:20',
-            'email'                   => 'required|email|max:255',
-            'website'                 => 'nullable|url|max:255',
-            'image'                   => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'stok_plasma_a_positif'   => 'nullable|integer|min:0',
-            'stok_plasma_a_negatif'   => 'nullable|integer|min:0',
-            'stok_plasma_b_positif'   => 'nullable|integer|min:0',
-            'stok_plasma_b_negatif'   => 'nullable|integer|min:0',
-            'stok_plasma_ab_positif'  => 'nullable|integer|min:0',
-            'stok_plasma_ab_negatif'  => 'nullable|integer|min:0',
-            'stok_plasma_o_positif'   => 'nullable|integer|min:0',
-            'stok_plasma_o_negatif'   => 'nullable|integer|min:0',
+            'name' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'hotline' => 'required|string|max:255',
+            'stok_plasma_a_positif' => 'nullable|integer|min:0',
+            'stok_plasma_a_negatif' => 'nullable|integer|min:0',
+            'stok_plasma_b_positif' => 'nullable|integer|min:0',
+            'stok_plasma_b_negatif' => 'nullable|integer|min:0',
+            'stok_plasma_ab_positif' => 'nullable|integer|min:0',
+            'stok_plasma_ab_negatif' => 'nullable|integer|min:0',
+            'stok_plasma_o_positif' => 'nullable|integer|min:0',
+            'stok_plasma_o_negatif' => 'nullable|integer|min:0',
         ]);
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('hospitals', 'public');
-        }
 
         $hospital->update($data);
 
-        return redirect()->route('admin.hospital.index')->with('success', 'Data rumah sakit berhasil diperbarui.');
+        return redirect()->route('hospital')->with('success', 'Data rumah sakit berhasil diperbarui.');
     }
 
     /**
@@ -159,6 +146,18 @@ class HospitalController extends Controller
     {
         $hospital->delete();
 
-        return redirect()->route('admin.hospital.index')->with('success', 'Data rumah sakit berhasil dihapus.');
+        return redirect()->route('hospital')->with('success', 'Data rumah sakit berhasil dihapus.');
+    }
+
+    public function showHospital()
+    {
+        $hospitals = Hospital::all();
+        return view('pages.pendonor.stok-plasma-pendonor', compact('hospitals'));
+    }
+
+    public function showHospitalPasien()
+    {
+        $hospitals = Hospital::all();
+        return view('pages.pasien.stok-plasma-donor', compact('hospitals'));
     }
 }

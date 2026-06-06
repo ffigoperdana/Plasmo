@@ -28,19 +28,29 @@ class Pasien extends Model
 {
     use HasFactory;
 
+    protected $table = 'pasien';
+
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'full_name',
-        'blood_type',
-        'phone_number',
-        'address',
+        'nama_pemohon',
+        'hotline',
+        'nama_pasien',
+        'gender',
         'age',
-        'medical_condition',
+        'blood_type',
+        'rhesus',
+        'hospital',
+        'hospital_room',
+        'province',
+        'city',
+        'File_TPK',
+        'Link_TPK',
+        'jumlah_plasma',
+        'vaccinated',
     ];
 
     /**

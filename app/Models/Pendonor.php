@@ -30,21 +30,36 @@ class Pendonor extends Model
 {
     use HasFactory;
 
+    protected $table = 'pendonor';
+
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'full_name',
-        'blood_type',
-        'phone_number',
-        'address',
+        'nama_pendonor',
+        'hotline',
+        'NIK',
+        'gender',
         'age',
+        'blood_type',
+        'rhesus',
         'weight',
-        'plasma_status',
-        'ready',
+        'height',
+        'province',
+        'city',
+        'kecamatan',
+        'kelurahan',
+        'alamat',
+        'covid_infected',
+        'donors',
+        'donors_apheresis',
+        'donors_hospital',
+        'PCR_Positive',
+        'PCR_Negative',
+        'PCR_Positive_file',
+        'PCR_Negative_file',
     ];
 
     /**
@@ -53,7 +68,8 @@ class Pendonor extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'ready' => 'boolean',
+        'PCR_Positive' => 'date',
+        'PCR_Negative' => 'date',
     ];
 
     /**

@@ -19780,7 +19780,7 @@ function dataTableController(id) {
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          Livewire.emit('deleteItem', _this.id);
+          Livewire.dispatch('deleteItem', { id: _this.id });
         }
       });
     }

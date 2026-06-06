@@ -23,13 +23,15 @@ class Faq extends Model
 {
     use HasFactory;
 
+    protected $table = 'faq';
+
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'question',
-        'answer',
+        'pertanyaan',
+        'jawaban',
     ];
 }

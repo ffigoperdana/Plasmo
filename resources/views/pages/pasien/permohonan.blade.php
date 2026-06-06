@@ -27,7 +27,7 @@
         <section class="daftar-rs pb-5">
             <article class="daftar-rs container">
                 <div class="content-settings d-flex flex-column" style="width: 100%;">
-                    <form style="width: 100%;" action="submit" method="POST">
+                    <form style="width: 100%;" action="{{ route('permohonan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                         <h4 style="font-family: 'Montserrat' !important; font-weight: bold !important;">Data Wali</h4>
                         <div class="form-group">

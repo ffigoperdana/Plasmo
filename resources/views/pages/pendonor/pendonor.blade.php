@@ -27,7 +27,7 @@
         <section class="daftar-rs pb-5">
             <article class="daftar-rs container">
                 <div class="content-settings d-flex flex-column" style="width: 100%;">
-                    <form style="width: 100%;" action="submit" method="POST">
+                    <form style="width: 100%;" action="{{ route('pendonor.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                         <h4 style="font-family: 'Montserrat' !important; font-weight: bold !important;">Data Pendonor</h4>
                         <div class="form-group">
@@ -148,8 +148,8 @@
                             <div class="file" style="width:30%;">
                                 <label for="file" style="font-weight: bold;font-family: 'Montserrat';">Upload dokumen PCR Positif</label>
                                 <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="PCR_Positive_File" id="file-tpk">
-                                <label class="custom-file-label" for="file-tpk">Unggah File</label>
+                                <input type="file" class="custom-file-input" name="PCR_Positive_file" id="file-pcr-positive">
+                                <label class="custom-file-label" for="file-pcr-positive">Unggah File</label>
                                 </div>
                             </div>
                         </div>
@@ -161,8 +161,8 @@
                             <div class="file" style="width:30%;">
                                 <label for="file" style="font-weight: bold;font-family: 'Montserrat';">Upload dokumen PCR Negatif</label>
                                 <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="file-tpk">
-                                <label class="custom-file-label"  name="PCR_Negative_File" for="file-tpk">Unggah File</label>
+                                <input type="file" class="custom-file-input" name="PCR_Negative_file" id="file-pcr-negative">
+                                <label class="custom-file-label" for="file-pcr-negative">Unggah File</label>
                                 </div>
                             </div>
                         </div>                        

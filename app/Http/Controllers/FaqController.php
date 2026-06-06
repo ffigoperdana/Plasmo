@@ -26,7 +26,7 @@ class FaqController extends Controller
     public function index()
     {
         $faqs = Faq::latest()->get();
-        return view('pages.admin.faq', compact('faqs'));
+        return view('pages.faq.faq-data', compact('faqs'));
     }
 
     /**
@@ -36,7 +36,7 @@ class FaqController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.faq-create');
+        return view('pages.faq.faq-new');
     }
 
     /**
@@ -50,13 +50,13 @@ class FaqController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'question' => 'required|string|max:255',
-            'answer'   => 'required|string',
+            'pertanyaan' => 'required|string|max:255',
+            'jawaban' => 'required|string',
         ]);
 
         Faq::create($data);
 
-        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil ditambahkan.');
+        return redirect()->route('faq')->with('success', 'FAQ berhasil ditambahkan.');
     }
 
     /**
@@ -67,7 +67,8 @@ class FaqController extends Controller
      */
     public function show(Faq $faq)
     {
-        return view('pages.admin.faq-show', compact('faq'));
+        $faqs = Faq::latest()->get();
+        return view('pages.faq.faq-data', compact('faqs'));
     }
 
     /**
@@ -78,7 +79,7 @@ class FaqController extends Controller
      */
     public function edit(Faq $faq)
     {
-        return view('pages.admin.faq-edit', compact('faq'));
+        return view('pages.faq.faq-edit', compact('faq'));
     }
 
     /**
@@ -93,13 +94,13 @@ class FaqController extends Controller
     public function update(Request $request, Faq $faq)
     {
         $data = $request->validate([
-            'question' => 'required|string|max:255',
-            'answer'   => 'required|string',
+            'pertanyaan' => 'required|string|max:255',
+            'jawaban' => 'required|string',
         ]);
 
         $faq->update($data);
 
-        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil diperbarui.');
+        return redirect()->route('faq')->with('success', 'FAQ berhasil diperbarui.');
     }
 
     /**
@@ -112,6 +113,12 @@ class FaqController extends Controller
     {
         $faq->delete();
 
-        return redirect()->route('admin.faq.index')->with('success', 'FAQ berhasil dihapus.');
+        return redirect()->route('faq')->with('success', 'FAQ berhasil dihapus.');
+    }
+
+    public function showFaq()
+    {
+        $faqs = Faq::latest()->get();
+        return view('pages.pasien.faq', compact('faqs'));
     }
 }

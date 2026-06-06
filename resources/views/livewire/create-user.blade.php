@@ -22,6 +22,17 @@
                 <x-jet-input-error for="user.email" class="mt-2" />
             </div>
 
+            <div class="form-group col-span-6 sm:col-span-5">
+                <x-jet-label for="role_id" value="{{ __('Role') }}" />
+                <select id="role_id" class="mt-1 block w-full form-control shadow-none" wire:model.defer="user.role_id">
+                    <option value="">Pilih Role</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @endforeach
+                </select>
+                <x-jet-input-error for="user.role_id" class="mt-2" />
+            </div>
+
             @if ($action == "createUser")
             <div class="form-group col-span-6 sm:col-span-5">
                 <x-jet-label for="password" value="{{ __('Password') }}" />

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pendonor;
 use App\Models\Pasien;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +12,9 @@ class PlasmoController extends Controller
     {
         $totalPendonors = Pendonor::count();
         $totalPasiens = Pasien::count();
-        $readyPendonors = Pendonor::where('ready', 1)->count();
+        $readyPendonors = $totalPendonors;
 
-        return view('pages.admin.dashboard', compact('totalPendonors', 'totalPasiens', 'readyPendonors'));
+        return view('pages.user.dashboard-admin', compact('totalPendonors', 'totalPasiens', 'readyPendonors'));
     }
 
     public function dashboardPendonor()
@@ -25,7 +24,7 @@ class PlasmoController extends Controller
 
     public function dashboardPasien()
     {
-        return redirect()->route('dashboard-pasien');
+        return redirect()->route('dashboard');
     }
 
     public function welcome()
@@ -37,12 +36,12 @@ class PlasmoController extends Controller
     {
         $role = Auth::user()->role->name;
 
-        if ($role === 'admin') {
-            return redirect()->route('dashboard');
-        } elseif ($role === 'pendonor') {
+        if ($role === 'Administrator') {
+            return redirect()->route('dashboard.admin');
+        } elseif ($role === 'Pendonor') {
             return redirect()->route('dashboard-pendonor');
-        } elseif ($role === 'pasien') {
-            return redirect()->route('dashboard-pasien');
+        } elseif ($role === 'Pencari Donor') {
+            return redirect()->route('dashboard');
         }
 
         return redirect()->route('welcome');

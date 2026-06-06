@@ -35,6 +35,8 @@ class Hospital extends Model
 {
     use HasFactory;
 
+    protected $table = 'hospital';
+
     /**
      * Atribut yang dapat diisi secara massal (mass assignable).
      *
@@ -43,10 +45,7 @@ class Hospital extends Model
     protected $fillable = [
         'name',
         'address',
-        'phone',
-        'email',
-        'website',
-        'image',
+        'hotline',
         'stok_plasma_a_positif',
         'stok_plasma_a_negatif',
         'stok_plasma_b_positif',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -12,6 +13,7 @@ class CreateUser extends Component
     public $userId;
     public $action;
     public $button;
+    public $roles;
 
     protected function getRules()
     {
@@ -24,7 +26,8 @@ class CreateUser extends Component
 
         return array_merge([
             'user.name' => 'required|min:3',
-            'user.email' => 'required|email|unique:users,email'
+            'user.email' => 'required|email|unique:users,email',
+            'user.role_id' => 'required|exists:roles,id',
         ], $rules);
     }
 
@@ -41,7 +44,7 @@ class CreateUser extends Component
 
         User::create($this->user);
 
-        $this->emit('saved');
+        $this->dispatch('saved');
         $this->reset('user');
     }
 
@@ -55,9 +58,10 @@ class CreateUser extends Component
             ->update([
                 "name" => $this->user->name,
                 "email" => $this->user->email,
+                "role_id" => $this->user->role_id,
             ]);
 
-        $this->emit('saved');
+        $this->dispatch('saved');
     }
 
     public function mount ()
@@ -66,6 +70,7 @@ class CreateUser extends Component
             $this->user = User::find($this->userId);
         }
 
+        $this->roles = Role::orderBy('name')->get();
         $this->button = create_button($this->action, "User");
     }
 

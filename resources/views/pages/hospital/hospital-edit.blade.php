@@ -10,7 +10,7 @@
     </x-slot>
 
     <div class="content-settings d-flex flex-column" style="width: 100%;">
-        <form style="width: 100%;" action="{{ url('hospital/update', $hospital->id ) }}" method="POST">
+        <form style="width: 100%;" action="{{ route('hospital.update', $hospital->id) }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="text" style="font-weight: bold;font-family: 'Montserrat';">Nama Rumah Sakit</label>
