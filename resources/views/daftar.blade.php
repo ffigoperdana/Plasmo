@@ -24,6 +24,15 @@
                     <p>Cari stok plasma dan pendonor sesuai kebutuhanmu</p>
                     <form style="width: 100%;" method="POST" action="{{ route('register') }}">
                     @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger" style="border-radius: 8px; font-size: 14px;">
+                                <ul style="margin-bottom: 0; padding-left: 16px;">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="text" style="font-weight: bold; color: #122D74; font-family: 'Montserrat';">Nama</label>
                             <input type="text" class="form-control" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Masukkan Nama Anda">
@@ -42,8 +51,8 @@
                         </div>
                         <div style="width:100%;">
                                 <label for="role_id" style="font-weight: bold;font-family: 'Montserrat';">Role Anda</label>
-                                        <select class="custom-select" name="role_id">
-                                            <option selected>Anda ingin mendaftar sebagai?</option>
+                                        <select class="custom-select" name="role_id" required>
+                                            <option value="" disabled selected>Anda ingin mendaftar sebagai?</option>
                                             <option value="2">Pencari Donor</option>
                                             <option value="3">Pendonor</option>
                                         </select>

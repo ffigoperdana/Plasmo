@@ -66,7 +66,8 @@ class HospitalController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string',
-            'hotline' => 'required|string|max:255',
+            'hotline' => 'required|string|regex:/^[0-9+\-\s]+$/|min:10|max:20',
+            'type' => 'required|in:rumah-sakit,udd,puskesmas',
             'stok_plasma_a_positif' => 'nullable|integer|min:0',
             'stok_plasma_a_negatif' => 'nullable|integer|min:0',
             'stok_plasma_b_positif' => 'nullable|integer|min:0',
@@ -120,7 +121,8 @@ class HospitalController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string',
-            'hotline' => 'required|string|max:255',
+            'hotline' => 'required|string|regex:/^[0-9+\-\s]+$/|min:10|max:20',
+            'type' => 'required|in:rumah-sakit,udd,puskesmas',
             'stok_plasma_a_positif' => 'nullable|integer|min:0',
             'stok_plasma_a_negatif' => 'nullable|integer|min:0',
             'stok_plasma_b_positif' => 'nullable|integer|min:0',
@@ -149,15 +151,68 @@ class HospitalController extends Controller
         return redirect()->route('hospital')->with('success', 'Data rumah sakit berhasil dihapus.');
     }
 
-    public function showHospital()
+    public function publicStokPlasma(Request $request)
     {
-        $hospitals = Hospital::all();
+        $query = Hospital::query();
+
+        // Filter by type
+        $type = $request->get('type');
+        if ($type && in_array($type, ['rumah-sakit', 'udd', 'puskesmas'])) {
+            $query->where('type', $type);
+        }
+
+        // Sort by time
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $perPage = (int) $request->get('per_page', 2);
+        $hospitals = $query->paginate($perPage)->appends($request->query());
+        return view('stok-plasma', compact('hospitals', 'sort', 'type'));
+    }
+
+    public function showHospital(Request $request)
+    {
+        $query = Hospital::query();
+
+        $type = $request->get('type');
+        if ($type && in_array($type, ['rumah-sakit', 'udd', 'puskesmas'])) {
+            $query->where('type', $type);
+        }
+
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $perPage = (int) $request->get('per_page', 2);
+        $hospitals = $query->paginate($perPage)->appends($request->query());
         return view('pages.pendonor.stok-plasma-pendonor', compact('hospitals'));
     }
 
-    public function showHospitalPasien()
+    public function showHospitalPasien(Request $request)
     {
-        $hospitals = Hospital::all();
+        $query = Hospital::query();
+
+        $type = $request->get('type');
+        if ($type && in_array($type, ['rumah-sakit', 'udd', 'puskesmas'])) {
+            $query->where('type', $type);
+        }
+
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $perPage = (int) $request->get('per_page', 2);
+        $hospitals = $query->paginate($perPage)->appends($request->query());
         return view('pages.pasien.stok-plasma-donor', compact('hospitals'));
     }
 }

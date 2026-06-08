@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home');
 Route::view('/tentang-kami', 'tentang-kami');
-Route::view('/stok-plasma', 'stok-plasma');
+Route::get('/stok-plasma', [HospitalController::class, 'publicStokPlasma'])->name('stok-plasma');
 Route::view('/kontak', 'kontak');
 Route::view('/masuk', 'masuk');
 Route::view('/daftar', 'daftar');
@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/faq-donor', [FaqController::class, 'showFaq'])->name('faq.donor');
     Route::get('/berita-donor', [BeritaController::class, 'showBerita'])->name('berita.donor');
     Route::view('/user-profile', 'pages.pasien.user-profile')->name('user-profile');
+    Route::post('/user-profile/update', [PasienController::class, 'updateProfile'])->name('user-profile.update');
     Route::get('/change-password', [PasienController::class, 'changePassword'])->name('change-password');
     Route::post('/change-password', [PasienController::class, 'updatePassword'])->name('change-password.update');
     Route::get('/change-email', [PasienController::class, 'changeEmail'])->name('change-email');

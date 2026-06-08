@@ -1,5 +1,171 @@
+/* ===========================
+   Admin Dashboard UI Styles
+   =========================== */
+
+/* Table header styling */
+.table thead th {
+    background-color: #f1f5f9 !important;
+    color: #1e293b !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    border-top: none !important;
+    white-space: nowrap;
+}
+
+.table tbody td,
+.table tbody th {
+    padding: 12px 16px !important;
+    vertical-align: middle !important;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9 !important;
+    color: #334155;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc !important;
+}
+
+/* Cards */
+.card {
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04) !important;
+}
+
+.card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 16px 20px !important;
+}
+
+.card-header h4 {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+}
+
+/* Buttons */
+.btn-create {
+    background-color: #6366f1;
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.15s;
+    text-decoration: none;
+}
+
+.btn-create:hover {
+    background-color: #4f46e5;
+    color: white !important;
+    text-decoration: none;
+}
+
+.btn-create i {
+    font-size: 14px;
+}
+
+/* Form styling */
+.content-settings {
+    background: white;
+    border-radius: 12px;
+    padding: 32px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.content-settings .form-group label {
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: #1e293b !important;
+    margin-bottom: 6px !important;
+}
+
+.content-settings .form-control {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.content-settings .form-control:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
+}
+
+.content-settings select.form-control {
+    appearance: auto;
+}
+
+.btn-submit {
+    background-color: #6366f1 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    width: 100%;
+    transition: background-color 0.15s;
+}
+
+.btn-submit:hover {
+    background-color: #4f46e5 !important;
+}
+
+/* Data page header */
+.data-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Action icons */
+.row-action--icon a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    transition: background-color 0.15s;
+}
+
+.row-action--icon a:hover {
+    background-color: #f1f5f9;
+}
+
+/* Badge improvements */
+.badge {
+    padding: 5px 10px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+}
+
+.badge-info {
+    background-color: #dbeafe !important;
+    color: #1e40af !important;
+}
+
+.badge-primary {
+    background-color: #e0e7ff !important;
+    color: #3730a3 !important;
+}
+
+/* Pagination */
 #table_pagination nav > div.hidden > div:nth-child(2) > span span.relative.text-gray-500 {
-    background-color: #6777ef !important;
+    background-color: #6366f1 !important;
     color: white;
 }
 
@@ -8,11 +174,68 @@
     padding: 8px 12px !important;
 }
 
+/* Form spacing */
 #form-create > div > div.mt-5,
 .section-body > div > div.max-w-7xl div.md\:grid div.mt-5 {
     margin-top: 0 !important;
 }
 
 textarea.form-control {
-    height: 64px !important;
+    height: 100px !important;
+    resize: vertical;
+}
+
+/* Section body spacing */
+.section-body > div {
+    padding: 0 !important;
+}
+
+/* Success/Error alerts */
+.alert-success {
+    background-color: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #065f46 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+}
+
+/* Fix Jetstream/Livewire form inputs in admin - override dark theme */
+#form-create input[type="text"],
+#form-create input[type="email"],
+#form-create input[type="password"],
+#form-create input[type="number"],
+#form-create input[type="tel"],
+#form-create select,
+#form-create textarea,
+.section-body input.form-control,
+.section-body select.form-control,
+.section-body textarea.form-control {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+}
+
+#form-create input:focus,
+#form-create select:focus,
+#form-create textarea:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
+    background-color: #ffffff !important;
+}
+
+/* Fix Jetstream button in admin */
+#form-create button[type="submit"],
+.section-body button[type="submit"] {
+    background-color: #22c55e !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+}
+
+#form-create button[type="submit"]:hover {
+    background-color: #16a34a !important;
 }

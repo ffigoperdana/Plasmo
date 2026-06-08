@@ -17,9 +17,9 @@
             </div>
             <div class="form-group">
                 <label for="text" style="font-weight: bold; font-family: 'Montserrat';">Jawaban FAQ</label>
-                <input type="text" class="form-control" id="isi-faq" name="jawaban" value="{{$faq->jawaban}}">
+                <textarea class="form-control" id="isi-faq" name="jawaban" rows="4">{{$faq->jawaban}}</textarea>
             </div>                   
-            <button type="submit" class="primary-btn mb-2 mt-4" style="width: 100%;">Buat FAQ</button>
+            <button type="submit" class="btn-submit mb-2 mt-4" style="background-color: #3b82f6; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 600; font-size: 15px; width: 100%; cursor: pointer;">Simpan Perubahan</button>
         </form>
     </div>
 </x-app-layout>

@@ -21,8 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
         );
 
+        $middleware->web(append: [
+            \Laravel\Jetstream\Http\Middleware\AuthenticateSession::class,
+        ]);
+
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -66,43 +66,27 @@
                         </a>                        
                     </article>
                     <article class="rumah-sakit-content" style="width: 100%;">
-                        <h3>Kegiatan Terbaru Anda</h3>
+                        <h3>Stok Plasma Tersedia</h3>
                         <hr>
                         <p>Berikut stok plasma di daerah sekitar anda :</p>
+                        @php
+                            $totalStok = \App\Models\Hospital::selectRaw('
+                                SUM(stok_plasma_a_positif) as a_pos, SUM(stok_plasma_a_negatif) as a_neg,
+                                SUM(stok_plasma_b_positif) as b_pos, SUM(stok_plasma_b_negatif) as b_neg,
+                                SUM(stok_plasma_ab_positif) as ab_pos, SUM(stok_plasma_ab_negatif) as ab_neg,
+                                SUM(stok_plasma_o_positif) as o_pos, SUM(stok_plasma_o_negatif) as o_neg
+                            ')->first();
+                        @endphp
                         <div class="downer mt-3 d-flex flex-column">
                             <div class="golongan-darah d-flex flex-wrap">
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah A+</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah B+</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah O+</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah AB+</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah A-</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>                                
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah B-</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>                                
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah O-</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>                                
-                                <div class="gol">
-                                    <h4 style="font-size: 14px !important;">Tipe Darah AB-</h4>
-                                    <p style="line-height: 0; font-size: 12px !important;">Sisa Stok: 3</p>
-                                </div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah A+</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->a_pos ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah B+</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->b_pos ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah O+</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->o_pos ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah AB+</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->ab_pos ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah A-</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->a_neg ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah B-</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->b_neg ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah O-</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->o_neg ?? 0 }}</p></div>
+                                <div class="gol"><h4 style="font-size: 14px !important;">Tipe Darah AB-</h4><p style="line-height: 0; font-size: 12px !important;">Sisa Stok: {{ $totalStok->ab_neg ?? 0 }}</p></div>
                             </div>
                             <div class="button mt-4 align-self-center" style="margin-bottom: 10px;">
                                 <a href="/stok-plasma-donor">
@@ -127,6 +111,26 @@
     </main>
 
     @include('components.footer-login')
+
+    <!-- Popup Lengkapi Golongan Darah -->
+    @if(!Auth::user()->golongan_darah)
+    <div class="modal fade" id="goldarModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 12px; border: none;">
+                <div class="modal-header" style="border-bottom: none; padding: 24px 24px 0;">
+                    <h5 style="font-weight: 700; color: #122D74;">Lengkapi Profil Anda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" style="text-align: center; padding: 16px 24px 24px;">
+                    <div style="margin-bottom: 16px;"><img src="{{asset('/images/logo.png')}}" alt="Plasmo" style="width: 100px;"></div>
+                    <p style="color: #555; margin-bottom: 20px;">Anda belum mengisi <strong>golongan darah</strong>. Informasi ini diperlukan agar kami dapat menampilkan data yang sesuai dengan kebutuhan Anda.</p>
+                    <a href="/user-profile" style="background-color: #122D74; color: white; border-radius: 8px; padding: 10px 32px; font-weight: 600; text-decoration: none; display: inline-block;">Lengkapi Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>$(document).ready(function(){ $('#goldarModal').modal('show'); });</script>
+    @endif
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

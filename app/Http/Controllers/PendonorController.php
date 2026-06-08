@@ -9,10 +9,22 @@ use Illuminate\Support\Facades\Hash;
 
 class PendonorController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $pendonors = Pendonor::all();
-        return view('pages.pendonor.list-pendonor', compact('pendonors'));
+        $user = Auth::user();
+        $golonganDarah = $user->golongan_darah;
+
+        // Only show pendonors matching the pasien's golongan darah
+        $pendonors = collect();
+        if ($golonganDarah) {
+            $query = \App\Models\User::where('role_id', 3)
+                ->whereNotNull('golongan_darah')
+                ->where('golongan_darah', $golonganDarah);
+
+            $pendonors = $query->paginate(5)->appends($request->query());
+        }
+
+        return view('pages.pendonor.list-pendonor', compact('pendonors', 'golonganDarah'));
     }
 
     public function showPendonor()

@@ -1,6 +1,6 @@
-require('./bootstrap');
+import './bootstrap';
 
-function dataTableController (id) {
+function dataTableController(id) {
     return {
         id,
         deleteItem() {
@@ -16,12 +16,12 @@ function dataTableController (id) {
                 if (result.isConfirmed) {
                     Livewire.dispatch('deleteItem', { id: this.id });
                 }
-            })
+            });
         }
-    }
+    };
 }
 
-function dataTableMainController () {
+function dataTableMainController() {
     return {
         setCallback() {
             Livewire.on('deleteResult', (result) => {
@@ -40,10 +40,10 @@ function dataTableMainController () {
                 }
             });
         }
-    }
+    };
 }
 
 window.__controller = {
     dataTableController,
     dataTableMainController
-}
+};

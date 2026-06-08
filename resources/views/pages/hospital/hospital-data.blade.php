@@ -8,12 +8,17 @@
             <div class="breadcrumb-item"><a href="{{ route('hospital') }}">Data Hospital</a></div>
         </div>
     </x-slot>
-    <div class="table px-3" style="background-color: white;">
+    <div class="data-page-header">
+        <div></div>
+        <a href="{{ route('hospital.new') }}" class="btn-create"><i class="fa fa-plus"></i> Tambah Rumah Sakit</a>
+    </div>
+    <div class="table px-3" style="background-color: white; border-radius: 12px;">
                         <table class="table">
                             <thead>
                               <tr style="color: #121F44; font-family: 'Heebo';">
                                 <th scope="col">No</th>
-                                <th scope="col" class="text-center">Nama Rumah Sakit</th>
+                                <th scope="col" class="text-center">Nama</th>
+                                <th scope="col" class="text-center">Tipe</th>
                                 <th scope="col" class="text-center">Address</th>
                                 <th scope="col" class="text-center">Hotline</th>
                                 <th scope="col" class="text-center">A+</th>
@@ -35,6 +40,9 @@
                                 </th>
                                 <td class="text-center">
                                     {{$data['name']}}
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge badge-info">{{$data['type'] ?? 'rumah-sakit'}}</span>
                                 </td>
                                 <td class="text-center">
                                     {{$data['address']}}

@@ -2,30 +2,22 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event listener mappings for the application.
-     *
-     * @var array
+     * Register any application services.
      */
-    protected $listen = [
-        ed::class => [
-            SendEmailVerificationNotification::class,
-        ],
-    ];
+    public function register(): void
+    {
+        //
+    }
 
     /**
-     * Register any events for your application.
-     *
-     * @return void
+     * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

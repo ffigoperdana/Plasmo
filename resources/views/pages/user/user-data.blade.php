@@ -9,6 +9,11 @@
         </div>
     </x-slot>
 
+    <div class="data-page-header">
+        <div></div>
+        <a href="{{ route('user.new') }}" class="btn-create"><i class="fa fa-plus"></i> Tambah User</a>
+    </div>
+
     <div>
         <livewire:table.main name="user" :model="$user" />
     </div>

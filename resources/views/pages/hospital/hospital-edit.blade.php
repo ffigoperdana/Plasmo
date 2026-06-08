@@ -21,8 +21,17 @@
                 <input type="text" class="form-control" id="address" name="address" value ="{{ $hospital->address }}">
             </div>
             <div class="form-group">
-                <label for="number" style="font-weight: bold; font-family: 'Montserrat';">Hotline Rumah Sakit</label>
-                <input type="number" class="form-control" id="hotline" name="hotline" value ="{{ $hospital->hotline }}">
+                <label for="type" style="font-weight: bold; font-family: 'Montserrat';">Tipe Tempat</label>
+                <select class="form-control" id="type" name="type">
+                    <option value="rumah-sakit" {{ $hospital->type === 'rumah-sakit' ? 'selected' : '' }}>Rumah Sakit</option>
+                    <option value="udd" {{ $hospital->type === 'udd' ? 'selected' : '' }}>UDD (Unit Donor Darah)</option>
+                    <option value="puskesmas" {{ $hospital->type === 'puskesmas' ? 'selected' : '' }}>Puskesmas</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hotline" style="font-weight: bold; font-family: 'Montserrat';">Hotline Rumah Sakit (WhatsApp)</label>
+                <input type="tel" class="form-control" id="hotline" name="hotline" value="{{ $hospital->hotline }}" pattern="[0-9+\-\s]+" title="Masukkan nomor telepon yang valid">
+                <small class="form-text text-muted">Format: kode negara + nomor (contoh: 6281234567890 untuk WhatsApp)</small>
             </div>
             <div style="display:flex; flex-direction:row; justify-content: space-between;">
                 <div class="form-group">
@@ -60,7 +69,7 @@
                     <input type="number" class="form-control" id="stok_plasma_o_negatif" name="stok_plasma_o_negatif" value = "{{ $hospital->stok_plasma_o_negatif }}">
                 </div>
             </div>                 
-            <button type="submit" class="primary-btn mb-2 mt-4" style="width: 100%;">Edit Rumah Sakit</button>
+            <button type="submit" class="btn-submit mb-2 mt-4" style="background-color: #3b82f6; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 600; font-size: 15px; width: 100%; cursor: pointer;">Simpan Perubahan</button>
         </form>
     </div>
 </x-app-layout>

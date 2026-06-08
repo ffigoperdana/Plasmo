@@ -14,7 +14,6 @@
         <!-- Styles -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Nunito:wght@400;600;700&family=Open+Sans&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('vendor/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}">
         <link rel="stylesheet" href="{{ asset('stisla/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('stisla/css/components.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/notyf/notyf.min.css') }}">
@@ -24,10 +23,9 @@
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free-v4-font-face.min.css" media="all">
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all">
 
-        <livewire:styles />
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Scripts -->
-        <script defer src="{{ asset('vendor/alpine.js') }}"></script>
+        @livewireStyles
     </head>
     <body class="antialiased">
         <div id="app">
@@ -72,8 +70,7 @@
         <script src="{{ asset('stisla/js/stisla.js') }}"></script>
         <script src="{{ asset('stisla/js/scripts.js') }}"></script>
 
-        <livewire:scripts />
-        <script src="{{ mix('js/app.js') }}" defer></script>
+        @livewireScripts
 
         @isset($script)
             {{ $script }}

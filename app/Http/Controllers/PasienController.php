@@ -44,6 +44,21 @@ class PasienController extends Controller
         return redirect()->route('dashboard')->with('success', 'Permohonan berhasil dikirim.');
     }
 
+    public function updateProfile(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'golongan_darah' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+            'no_telepon' => 'nullable|string|regex:/^[0-9+\-\s]+$/|min:10|max:20',
+            'alamat' => 'nullable|string|max:500',
+            'usia' => 'nullable|integer|min:17|max:65',
+        ]);
+
+        Auth::user()->update($data);
+
+        return back()->with('success', 'Profil berhasil diperbarui.');
+    }
+
     public function changePassword()
     {
         return view('pages.pasien.change-password');

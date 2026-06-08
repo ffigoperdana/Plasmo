@@ -8,7 +8,11 @@
             <div class="breadcrumb-item"><a href="{{ route('faq') }}">Data Faq</a></div>
         </div>
     </x-slot>
-    <div class="table px-3" style="background-color: white;">
+    <div class="data-page-header">
+        <div></div>
+        <a href="{{ route('faq.new') }}" class="btn-create"><i class="fa fa-plus"></i> Tambah FAQ</a>
+    </div>
+    <div class="table px-3" style="background-color: white; border-radius: 12px;">
                         <table class="table">
                             <thead>
                               <tr style="color: #121F44; font-family: 'Heebo';">

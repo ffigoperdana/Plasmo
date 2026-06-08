@@ -15,7 +15,7 @@ class CreateUser extends Component
     public $button;
     public $roles;
 
-    protected function getRules()
+    public function getRules()
     {
         $rules = ($this->action == "updateUser") ? [
             'user.email' => 'required|email|unique:users,email,' . $this->userId

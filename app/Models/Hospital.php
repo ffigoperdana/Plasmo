@@ -46,6 +46,7 @@ class Hospital extends Model
         'name',
         'address',
         'hotline',
+        'type',
         'stok_plasma_a_positif',
         'stok_plasma_a_negatif',
         'stok_plasma_b_positif',

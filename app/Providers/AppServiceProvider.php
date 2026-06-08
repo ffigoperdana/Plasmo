@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+
+        // Register Livewire components from the old namespace location
+        Livewire::component('create-hospital', \App\Http\Livewire\CreateHospital::class);
+        Livewire::component('create-user', \App\Http\Livewire\CreateUser::class);
+        Livewire::component('table.main', \App\Http\Livewire\Table\Main::class);
+        Livewire::component('table.hospital', \App\Http\Livewire\Table\Hospital::class);
     }
 
     protected function jetstreamComponentAliases(): array

@@ -95,7 +95,7 @@
                         <h2 style="line-height: 0; color:#063726 !important;">Tertarik menjadi pendonor ?</h2>
                         <p style="line-height: 0;">Daftar dan ikuti semua langkahnya :)</p>
                     </div>
-                    <a href="{{ route('register') }}"><button type="button" class="primary-btn-green">Daftar Sekarang</button></a>
+                    <a href="/daftar"><button type="button" class="primary-btn-green">Daftar Sekarang</button></a>
                 </div>
             </article>
         </section>

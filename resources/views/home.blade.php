@@ -24,7 +24,7 @@
                     <h3>KITA HADAPI BERSAMA COVID</h3>
                     <h1 class="mt-4">Donorkan Plasma Darah Anda Untuk Membantu Sesama.</h1>
                     <p class="mt-2">Ayo bantu sesama dengan mendonorkan plasma darah anda. Banyak saudara kita yang membutuhkan plasma darah saat ini. Kita hadapi bersama Covid-19 !</p>
-                    <a href="{{ route('register') }}"><button type="button" class="primary-btn mt-4">Daftar Sekarang</button></a>
+                    <a href="/daftar"><button type="button" class="primary-btn mt-4">Daftar Sekarang</button></a>
                 </div>
                 <div class="hero-image">
                     <img src="{{asset('/images/hero-image.png')}}" class="mt-5" width="100%" alt="gambar hero">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="button align-self-center">
-                    <a href="{{ route('register') }}"><button type="button" class="primary-btn">Daftar Sekarang</button></a>
+                    <a href="/daftar"><button type="button" class="primary-btn">Daftar Sekarang</button></a>
                 </div>
             </article>
         </section>
@@ -73,7 +73,7 @@
                             <li>Lebih diutamakan yang pernah mendonorkan darah.</li>
                         </ol>
                     </div>
-                    <a href="{{ route('register') }}"><button type="button" class="primary-btn-green">Daftar Sekarang</button></a>
+                    <a href="/daftar"><button type="button" class="primary-btn-green">Daftar Sekarang</button></a>
                 </div>
             </article>
         </section>
