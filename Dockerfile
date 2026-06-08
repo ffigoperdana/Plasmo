@@ -53,6 +53,9 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 # Supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Create required directories
+RUN mkdir -p /var/log/supervisor
+
 # Create storage link
 RUN php artisan storage:link || true
 
