@@ -4,7 +4,7 @@ pipeline {
     environment {
         COOLIFY_API_URL  = 'http://coolify:8080/api/v1'
         COOLIFY_TOKEN    = credentials('coolify-api-token')
-        COOLIFY_APP_UUID = credentials('coolify-app-uuid-plasmo')
+        COOLIFY_APP_UUID = 'f8qhf35brwsrxpocfp74gogh'
     }
 
     stages {
