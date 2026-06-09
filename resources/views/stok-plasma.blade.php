@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{asset('/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('/css/responsive.css')}}">
+    <link rel="icon" href="{{asset('/images/logo-favicon.png')}}" type="image/png"><title>Plasmo</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Stok Plasma - Plasmo</title>
     <style>
       .modal-login .modal-content { border-radius: 12px; border: none; }
       .modal-login .modal-header { border-bottom: none; padding: 24px 24px 0; }

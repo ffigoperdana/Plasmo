@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="{{asset('/css/responsive.css')}}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>List Pendonor - Plasmo</title>
-    <style>
+    <link rel="icon" href="{{asset('/images/logo-favicon.png')}}" type="image/png"><title>Plasmo</title>    <style>
       .blur-overlay { position: relative; }
       .blur-overlay .blur-content { filter: blur(5px); pointer-events: none; user-select: none; }
       .blur-overlay .blur-warning {
